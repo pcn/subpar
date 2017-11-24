@@ -101,7 +101,11 @@ def main(argv):
     args = parser.parse_args(argv[1:])
 
     # Parse information from stub file that's too hard to compute in Skylark
-    import_roots, interpreter = parse_stub(args.stub_file)
+    try:
+        import_roots, interpreter = parse_stub(args.stub_file)
+    except UnicodeDecodeError:
+        import_roots = []
+        interpreter = '/usr/bin/python'
 
     par = python_archive.PythonArchive(
         main_filename=args.main_filename,
